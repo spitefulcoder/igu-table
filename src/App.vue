@@ -1,38 +1,19 @@
 <template>
   <div id="app">
     <div>
+      <HeaderNav @change-tab="handleChangeTab" />
       <AddMember />
-      <b-tabs no-fade justified content-class="mt-3">
-        <b-form-select class="form-selector" :options="options.faculty" />
-        <b-form-select class="form-selector" :options="options.course" />
-        <b-form-select class="form-selector" :options="options.group" />
-        <b-tab title="Общая информация" active>
-          <TheTable
-            :items="students"
-            :fields="generalFields"
-            @update="updateStudent"
-          />
-        </b-tab>
-        <b-tab title="Физическое развитие">
-          <TheTable
-            :items="students"
-            :fields="physicalFields"
-            @update="updateStudent"
-          />
-        </b-tab>
-        <b-tab title="Физ. подготовленность">
-          <TheTable
-            :items="students"
-            :fields="standardsFields"
-            @update="updateStudent"
-          />
-        </b-tab>
-      </b-tabs>
+      <TheTable
+        :items="students"
+        :fields="generalFields"
+        @update="updateStudent"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import HeaderNav from "./components/HeaderNav.vue";
 import TheTable from "./components/TheTable.vue";
 import AddMember from "./components/AddMember.vue";
 import { nanoid } from "nanoid";
@@ -50,6 +31,7 @@ import {
 export default {
   components: {
     TheTable,
+    HeaderNav,
     AddMember,
   },
   data() {
@@ -243,6 +225,10 @@ export default {
       // updates["/students/" + data.index].data.field.key = data.value;
       // set(ref(this.database, "students/", userId), {});
       return update(ref(this.database), updates);
+    },
+
+    handleChangeTab(val) {
+      console.log(val);
     },
   },
 };
