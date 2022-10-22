@@ -7,47 +7,29 @@
         @close="toggleStudentModal"
       />
       <b-button @click="toggleStudentModal"> Добавить </b-button>
-      <b-tabs no-fade justified content-class="mt-3">
-        <v-select
-          class="form-selector"
-          :options="options.faculty"
-          placeholder="Факультет"
-          label="name"
-        />
-        <v-select
-          class="form-selector"
-          :options="options.course"
-          placeholder="Курс"
-          label="name"
-        />
-        <v-select
-          class="form-selector"
-          :options="options.group"
-          placeholder="Группа"
-          label="name"
-        />
-        <b-tab title="Общая информация" active>
-          <TheTable
-            :items="students"
-            :fields="tableColumns.generalFields"
-            @update="updateStudent"
-          />
-        </b-tab>
-        <b-tab title="Физическое развитие">
-          <TheTable
-            :items="students"
-            :fields="tableColumns.physicalFields"
-            @update="updateStudent"
-          />
-        </b-tab>
-        <b-tab title="Физ. подготовленность">
-          <TheTable
-            :items="students"
-            :fields="tableColumns.standardsFields"
-            @update="updateStudent"
-          />
-        </b-tab>
-      </b-tabs>
+      <v-select
+        class="form-selector"
+        :options="options.faculty"
+        placeholder="Факультет"
+        label="name"
+      />
+      <v-select
+        class="form-selector"
+        :options="options.course"
+        placeholder="Курс"
+        label="name"
+      />
+      <v-select
+        class="form-selector"
+        :options="options.group"
+        placeholder="Группа"
+        label="name"
+      />
+      <TheTable
+        :items="students"
+        :fields="tableColumns.generalFields"
+        @update="updateStudent"
+      />
     </div>
   </div>
 </template>
@@ -55,7 +37,6 @@
 <script>
 import HeaderNav from "./components/HeaderNav.vue";
 import TheTable from "./components/TheTable.vue";
-import AddMember from "./components/AddMember.vue";
 import FormTextInput from "./components/inputs/FormTextInput.vue";
 import { nanoid } from "nanoid";
 import { initializeApp } from "firebase/app";
@@ -80,7 +61,6 @@ export default {
   components: {
     TheTable,
     HeaderNav,
-    AddMember,
     FormTextInput,
     AddStudentForm,
   },
@@ -101,7 +81,7 @@ export default {
   mounted() {
     const firebaseConfig = {
       databaseURL:
-        "https://isu-pe-students-default-rtdb.europe-west1.firebasedatabase.app/",
+        "https://table-995e2-default-rtdb.europe-west1.firebasedatabase.app/",
     };
 
     const app = initializeApp(firebaseConfig);
