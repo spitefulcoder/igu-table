@@ -2,12 +2,52 @@
   <div id="app">
     <div>
       <HeaderNav @change-tab="handleChangeTab" />
-      <AddMember />
-      <TheTable
-        :items="students"
-        :fields="generalFields"
-        @update="updateStudent"
+      <AddStudentForm
+        :is-show-modal="isAddStudentModalOpen"
+        @close="toggleStudentModal"
       />
+      <b-button @click="toggleStudentModal"> Добавить </b-button>
+      <b-tabs no-fade justified content-class="mt-3">
+        <v-select
+          class="form-selector"
+          :options="options.faculty"
+          placeholder="Факультет"
+          label="name"
+        />
+        <v-select
+          class="form-selector"
+          :options="options.course"
+          placeholder="Курс"
+          label="name"
+        />
+        <v-select
+          class="form-selector"
+          :options="options.group"
+          placeholder="Группа"
+          label="name"
+        />
+        <b-tab title="Общая информация" active>
+          <TheTable
+            :items="students"
+            :fields="tableColumns.generalFields"
+            @update="updateStudent"
+          />
+        </b-tab>
+        <b-tab title="Физическое развитие">
+          <TheTable
+            :items="students"
+            :fields="tableColumns.physicalFields"
+            @update="updateStudent"
+          />
+        </b-tab>
+        <b-tab title="Физ. подготовленность">
+          <TheTable
+            :items="students"
+            :fields="tableColumns.standardsFields"
+            @update="updateStudent"
+          />
+        </b-tab>
+      </b-tabs>
     </div>
   </div>
 </template>
@@ -16,6 +56,7 @@
 import HeaderNav from "./components/HeaderNav.vue";
 import TheTable from "./components/TheTable.vue";
 import AddMember from "./components/AddMember.vue";
+import FormTextInput from "./components/inputs/FormTextInput.vue";
 import { nanoid } from "nanoid";
 import { initializeApp } from "firebase/app";
 import {
@@ -27,138 +68,40 @@ import {
   push,
   child,
 } from "firebase/database";
+import { tableColumns } from "./constants/tables/table-columns";
+import {
+  faculty,
+  courses,
+  studentsGroups,
+} from "./constants/selects-options/selects-options";
+import AddStudentForm from "./components/AddStudentForm.vue";
 
 export default {
   components: {
     TheTable,
     HeaderNav,
     AddMember,
+    FormTextInput,
+    AddStudentForm,
   },
   data() {
     return {
       options: {
-        faculty: [
-          "Прикладная ифнорматика",
-          "Сервис",
-          "Туризм",
-          "Реклама и связи с общественностью",
-          "Управление персоналом",
-        ],
-        course: [1, 2, 3, 4],
-        group: ["ЦБ", "ФБ", "Н332-ДБ"],
+        faculty: faculty,
+        course: courses,
+        group: studentsGroups,
       },
+      isAddStudentModalOpen: false,
       students: [],
       database: null,
-      generalFields: [
-        {
-          key: "fullname",
-          label: "Фамилия Имя Отчество",
-          editable: true,
-        },
-        {
-          key: "dateOfBirth",
-          label: "Дата рождения",
-          editable: true,
-        },
-        {
-          key: "course",
-          label: "Курс",
-          editable: true,
-        },
-        {
-          key: "faculty",
-          label: "Факультет",
-          editable: true,
-        },
-        {
-          key: "group",
-          label: "Группа",
-          editable: true,
-        },
-        {
-          key: "healthGroup",
-          label: "Группа здоровья",
-          editable: true,
-        },
-      ],
-      physicalFields: [
-        {
-          key: "fullname",
-          label: "Фамилия Имя Отчество",
-          editable: true,
-        },
-        {
-          key: "height",
-          label: "Рост (см)",
-          editable: true,
-        },
-        {
-          key: "weight",
-          label: "Вес (кг)",
-          editable: true,
-        },
-        {
-          key: "heartRate",
-          label: "ЧСС в покое",
-          editable: true,
-        },
-        {
-          key: "bloodPressure",
-          label: "АД в покое",
-          editable: true,
-        },
-        {
-          key: "dynamometer",
-          label: "ДИНАМОМ правая/левая",
-          editable: true,
-        },
-      ],
-      standardsFields: [
-        {
-          key: "fullname",
-          label: "Фамилия Имя Отчество",
-          editable: true,
-        },
-        {
-          key: "running",
-          label: "Бег (с)",
-          editable: true,
-        },
-        {
-          key: "throwing",
-          label: "Метание (см)",
-          editable: true,
-        },
-        {
-          key: "boat",
-          label: "Лодочка (с)",
-          editable: true,
-        },
-        {
-          key: "squats",
-          label: "Приседания",
-          editable: true,
-        },
-        {
-          key: "pullUps",
-          label: "Подтягивания",
-          editable: true,
-        },
-        {
-          key: "pushUps",
-          label: "Отжимания",
-          editable: true,
-        },
-      ],
+      tableColumns: tableColumns,
     };
   },
 
   mounted() {
     const firebaseConfig = {
-      // ...
-      // The value of `databaseURL` depends on the location of the database
       databaseURL:
-        "https://table-995e2-default-rtdb.europe-west1.firebasedatabase.app/",
+        "https://isu-pe-students-default-rtdb.europe-west1.firebasedatabase.app/",
     };
 
     const app = initializeApp(firebaseConfig);
@@ -170,6 +113,10 @@ export default {
   },
 
   methods: {
+    toggleStudentModal() {
+      this.isAddStudentModalOpen = !this.isAddStudentModalOpen;
+    },
+
     fetchStudents() {
       get(ref(this.database), `students/`)
         .then((snapshot) => {

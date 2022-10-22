@@ -3,7 +3,7 @@
     <b-form-input
       class="input"
       v-for="(item, index) in items"
-      :key="index"
+      :key="item.key"
       :placeholder="item.placeholder"
       :value="item.value"
     />
