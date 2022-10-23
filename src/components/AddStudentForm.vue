@@ -262,14 +262,6 @@ export default {
         height: "",
         weight: "",
         heartRate: "",
-        /* bloodPressure: {
-          max: "",
-          min: "",
-        },
-        dynamometer: {
-          right: "",
-          left: "",
-        }, */
         bloodPressureMax: "",
         bloodPressureMin: "",
         dynamometerRight: "",
