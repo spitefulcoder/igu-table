@@ -1,0 +1,1 @@
+export const STUDENTS_FB_PATH = 'students'

@@ -38,9 +38,8 @@
 import HeaderNav from "./components/HeaderNav.vue";
 import TheTable from "./components/TheTable.vue";
 import FormTextInput from "./components/inputs/FormTextInput.vue";
-import { nanoid } from "nanoid";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get, update } from "firebase/database";
+import { getDatabase, ref, set, get, update, onValue } from "firebase/database";
 import { tableColumns } from "./constants/tables/table-columns";
 import {
   faculty,
@@ -48,6 +47,8 @@ import {
   studentsGroups,
 } from "./constants/selects-options/selects-options";
 import AddStudentForm from "./components/AddStudentForm.vue";
+import { firebaseConfig } from "./constants/firebase/firebase-config";
+import { STUDENTS_FB_PATH } from "./constants/firebase/data-paths";
 
 export default {
   components: {
@@ -72,69 +73,30 @@ export default {
   },
 
   mounted() {
-    const firebaseConfig = {
-      databaseURL:
-        "https://table-995e2-default-rtdb.europe-west1.firebasedatabase.app/",
-    };
-
     const app = initializeApp(firebaseConfig);
 
     this.database = getDatabase(app);
 
-    // this.uploadNewStudent();
-    this.fetchStudents();
+    const studentsRef = ref(this.database, STUDENTS_FB_PATH)
+    onValue(studentsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const studentsDataObj = snapshot.val()
+        const sortedStudentsArray = Object.values(studentsDataObj).sort((a, b) => a.fullname < b.fullname ? -1 : 1)
+        this.students = sortedStudentsArray
+      }
+      else {
+        console.error("No data from db")
+      }
+    })
   },
 
+  destroyed() {
+
+  },
+  
   methods: {
     toggleStudentModal() {
       this.isAddStudentModalOpen = !this.isAddStudentModalOpen;
-    },
-
-    fetchStudents() {
-      get(ref(this.database), `students/`)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            console.log(snapshot.val());
-            this.students = Object.values(Object.values(snapshot.val())[0]);
-            console.log(this.students);
-          } else {
-            console.log("No data available");
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
-
-    uploadNewStudent() {
-      const nextStudentId = nanoid();
-      set(ref(this.database, `students/${nextStudentId}`), {
-        id: nextStudentId,
-        fullname: "Афанасьев Геогргий Викторович",
-        faculty: "Управление персоналом",
-        group: "Н332-ДБ",
-        course: 3,
-        isActive: false,
-        healthGroup: 1,
-        dateOfBirth: "15.05.1999",
-        height: 168,
-        weight: 55,
-        heartRate: 82,
-        bloodPressure: {
-          max: 120,
-          min: 70,
-        },
-        dynamometer: {
-          right: 20,
-          left: 20,
-        },
-        running: 100,
-        throwing: 5,
-        boat: 30,
-        squats: 12,
-        pullUps: 10,
-        pushUps: 12,
-      });
     },
 
     updateStudent(data) {
@@ -143,10 +105,7 @@ export default {
       result[data.field.key] = data.value;
 
       const updates = {};
-      updates["/students/" + data.item.id] = result;
-      console.log(updates);
-      // updates["/students/" + data.index].data.field.key = data.value;
-      // set(ref(this.database, "students/", userId), {});
+      updates[`/${STUDENTS_FB_PATH}/${data.item.id}`] = result;
       return update(ref(this.database), updates);
     },
 
