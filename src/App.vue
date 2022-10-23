@@ -27,7 +27,7 @@
       />
       <TheTable
         :items="students"
-        :fields="tableColumns.generalFields"
+        :fields="tableColumns[tableName]"
         @update="updateStudent"
       />
     </div>
@@ -40,15 +40,7 @@ import TheTable from "./components/TheTable.vue";
 import FormTextInput from "./components/inputs/FormTextInput.vue";
 import { nanoid } from "nanoid";
 import { initializeApp } from "firebase/app";
-import {
-  getDatabase,
-  ref,
-  set,
-  get,
-  update,
-  push,
-  child,
-} from "firebase/database";
+import { getDatabase, ref, set, get, update } from "firebase/database";
 import { tableColumns } from "./constants/tables/table-columns";
 import {
   faculty,
@@ -75,6 +67,7 @@ export default {
       students: [],
       database: null,
       tableColumns: tableColumns,
+      tableName: "generalFields",
     };
   },
 
@@ -101,7 +94,9 @@ export default {
       get(ref(this.database), `students/`)
         .then((snapshot) => {
           if (snapshot.exists()) {
-            this.students = Object.values(snapshot.val())[0];
+            console.log(snapshot.val());
+            this.students = Object.values(Object.values(snapshot.val())[0]);
+            console.log(this.students);
           } else {
             console.log("No data available");
           }
@@ -112,8 +107,9 @@ export default {
     },
 
     uploadNewStudent() {
-      set(ref(this.database, "stundets/" + 0), {
-        id: nanoid(),
+      const nextStudentId = nanoid();
+      set(ref(this.database, `students/${nextStudentId}`), {
+        id: nextStudentId,
         fullname: "Афанасьев Геогргий Викторович",
         faculty: "Управление персоналом",
         group: "Н332-ДБ",
@@ -147,7 +143,7 @@ export default {
       result[data.field.key] = data.value;
 
       const updates = {};
-      updates["/students/" + 0] = result;
+      updates["/students/" + data.item.id] = result;
       console.log(updates);
       // updates["/students/" + data.index].data.field.key = data.value;
       // set(ref(this.database, "students/", userId), {});
@@ -155,7 +151,7 @@ export default {
     },
 
     handleChangeTab(val) {
-      console.log(val);
+      this.tableName = val;
     },
   },
 };
