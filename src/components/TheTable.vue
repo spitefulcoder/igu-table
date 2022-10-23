@@ -64,6 +64,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .table > tbody > tr > td {
+  max-width: 1000px;
+}
+
 .editable-table {
   width: 1140px;
 }
@@ -115,6 +119,44 @@ export default {
 
 ::v-deep .search-input {
   width: 100px;
+}
+
+::v-deep .vinput .vs__dropdown-toggle {
+  background: transparent;
+  border-radius: 50px;
+  border: none;
+  color: #000 !important;
+  border: none !important;
+}
+
+::v-deep .vinput .vs__selected {
+  font-size: 18px;
+}
+
+::v-deep .vs--open .vs__dropdown-toggle {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+::v-deep .vinput .vs__dropdown {
+  color: #000;
+  font-size: 12px;
+  &-menu {
+    background: #dfe6ff;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    color: #000;
+    border: none;
+    border-radius: 0 0 32px 32px;
+  }
+  &-option:hover {
+    background: #2a2e96;
+    border-radius: 32px;
+  }
+  &-option--highlight {
+    background: #2a2e96;
+    border-radius: 32px;
+  }
 }
 
 ::v-deep .form-control {

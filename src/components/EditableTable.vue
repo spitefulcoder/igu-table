@@ -34,27 +34,19 @@
       </div>
       <div :key="index + index" v-else-if="showField(field, data, 'select')">
         <v-select
+          :clearable="false"
           :id="`${field.key}-${data.item.id}`"
           @keydown.native="handleKeydown($event, index, data)"
           @input="
             (value) => inputHandler(value, data, field.key, field.options)
           "
           v-bind="{ ...field }"
+          class="vinput"
           v-focus="enableFocus()"
           label="name"
           :options="field.options"
-          :value="getFieldValue(field.options, data)"
-          :state="getValidity(data, field).valid ? null : false"
+          :value="data.item[[field.key]]"
         ></v-select>
-        <b-tooltip
-          v-if="getValidity(data, field).errorMessage"
-          :target="`${field.key}-${data.item.id}`"
-          variant="danger"
-          :show="!getValidity(data, field).valid"
-          :disabled="true"
-        >
-          {{ getValidity(data, field).errorMessage }}
-        </b-tooltip>
       </div>
       <b-form-checkbox
         :id="`${field.key}-${data.item.id}`"
@@ -89,17 +81,7 @@
           v-focus="enableFocus()"
           :type="field.type"
           :value="getFieldValue(field, data)"
-          :state="getValidity(data, field).valid ? null : false"
         ></b-form-input>
-        <b-tooltip
-          v-if="getValidity(data, field).errorMessage"
-          :target="`${field.key}-${data.item.id}`"
-          variant="danger"
-          :show="!getValidity(data, field).valid"
-          :disabled="true"
-        >
-          {{ getValidity(data, field).errorMessage }}
-        </b-tooltip>
       </div>
       <div
         class="data-cell"
@@ -317,11 +299,10 @@ export default Vue.extend({
         changedValue = selectedValue ? selectedValue.value : value;
       }
 
-      const validity = data.field.validate
+        const validity = data.field.validate
         ? data.field.validate(changedValue)
         : { valid: true };
       const fields = this.tableMap[data.item.id].fields;
-      fields[key].validity.valid = true;
 
       if (this.value && (!validity || validity?.valid === true)) {
         if (!this.localChanges[data.item.id]) {
@@ -345,7 +326,6 @@ export default Vue.extend({
           ...data,
           id: data.item.id,
           value: changedValue,
-          validity: { ...fields[key].validity },
         });
       }
     },
@@ -428,7 +408,8 @@ export default Vue.extend({
       };
     },
     getValidity(data, field) {
-      return this.tableMap[data.item.id].fields[field.key].validity;
+      // console.log(this.tableMap[data.item.id].fields[field.key]);
+      return this.tableMap[data.item.id].fields[field.key];
     },
     showField(field, data, type) {
       return (
@@ -484,7 +465,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style lang="scss">
 table.b-table {
   width: unset;
 }

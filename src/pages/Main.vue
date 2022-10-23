@@ -82,6 +82,7 @@ export default {
   },
 
   mounted() {
+    document.body.style.background = "white";
     const app = initializeApp(firebaseConfig);
 
     this.database = getDatabase(app);
@@ -240,9 +241,5 @@ header {
     background: #2a2e96;
     border-radius: 32px;
   }
-}
-
-::v-deep .form-selector .vs__clear,
-::v-deep .form-selector .vs__open-indicator {
 }
 </style>
