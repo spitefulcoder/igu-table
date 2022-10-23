@@ -45,6 +45,7 @@ export default {
 <style lang="scss" scoped>
 .navs {
   display: flex;
+  margin-left: auto;
 }
 
 .nav-item--active {
