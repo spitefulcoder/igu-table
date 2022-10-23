@@ -1,6 +1,8 @@
 <template>
   <div>
+    <div v-if="items.length === 0">НЕТ ДАННЫХ</div>
     <b-editable-table
+      v-else
       striped
       class="editable-table"
       :filter="filter"
@@ -9,7 +11,10 @@
       @input-change="handleInput"
     >
       <template #cell(delete)="data">
-        <BIconTrash @click="log(data)" class="remove-icon"></BIconTrash>
+        <BIconTrash
+          @click="deleteStudent(data)"
+          class="remove-icon"
+        ></BIconTrash>
       </template>
 
       <template #head(fullname)>
@@ -63,8 +68,8 @@ export default {
     handleInput(data) {
       this.$emit("update", data);
     },
-    log(data) {
-      console.log(data);
+    deleteStudent(data) {
+      this.$emit("delete", data);
     },
   },
 };
@@ -191,7 +196,6 @@ export default {
     box-shadow: none;
     padding: 0;
   }
-
 }
 ::v-deep .custom-select {
   background: red;

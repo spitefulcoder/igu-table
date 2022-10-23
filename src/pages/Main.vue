@@ -39,6 +39,7 @@
       :items="students"
       :fields="tableColumns[tableName]"
       @update="updateStudent"
+      @delete="deleteStudent"
     />
   </div>
 </template>
@@ -48,7 +49,15 @@ import HeaderNav from "../components/HeaderNav.vue";
 import TheTable from "../components/TheTable.vue";
 import FormTextInput from "../components/inputs/FormTextInput.vue";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get, update, onValue } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  update,
+  onValue,
+  remove,
+} from "firebase/database";
 import { tableColumns } from "../constants/tables/table-columns";
 import {
   faculty,
@@ -96,7 +105,7 @@ export default {
         );
         this.students = sortedStudentsArray;
       } else {
-        console.error("No data from db");
+        this.students = [];
       }
     });
   },
@@ -106,6 +115,12 @@ export default {
   methods: {
     toggleStudentModal() {
       this.isAddStudentModalOpen = !this.isAddStudentModalOpen;
+    },
+
+    deleteStudent(data) {
+      return update(ref(this.database), {
+        [`/${STUDENTS_FB_PATH}/${data.item.id}`]: null,
+      });
     },
 
     updateStudent(data) {
@@ -126,6 +141,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  width: 1140px;
+}
 * {
   font-family: "Helvetica Now Display";
   font-style: normal;
