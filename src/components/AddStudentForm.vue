@@ -17,7 +17,10 @@
           >
         </div>
         <div class="add-student-form__body">
-          <div class="add-student-form__step1 step1-form">
+          <div 
+            class="add-student-form__step1 step1-form"
+            v-if="currentStep === 1"
+          >
             <FormInput 
               label="ФИО:"
               container-class="step1-form__fio"
@@ -54,6 +57,12 @@
               placeholder="Факультет"
               container-class="step1-form__faculty"
             />
+          </div>
+          <div 
+            class="add-student-form__step2 step2-form"
+            v-else-if="currentStep === 2"
+          >
+            
           </div>
         </div>
         <div class="add-student-form__footer">
