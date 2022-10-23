@@ -18,17 +18,22 @@
         </div>
         <div class="add-student-form__body">
           <div 
-            class="add-student-form__step1 step1-form"
+            class="add-student-form__step1 add-student-form__step-form step1-form"
             v-if="currentStep === 1"
           >
             <FormInput 
               label="ФИО:"
+              :value="nextStudentData.fullname"
+              @input="onInput($event, 'fullname', 'text')"
+              placeholder="Иванов Иван Иванович"
               container-class="step1-form__fio"
             />
             <FormInput 
               label="Курс:"
               view-type="select"
               :options="$options.coursesOptions"
+              :value="nextStudentData.course"
+              @input="onInput($event, 'course', 'select')"
               placeholder="Курс"
               container-class="step1-form__course"
             />
@@ -36,17 +41,24 @@
               label="Группа:"
               view-type="select"
               :options="$options.groupsOptions"
+              :value="nextStudentData.group"
+              @input="onInput($event, 'group', 'select')"
               placeholder="Группа"
               container-class="step1-form__studentsGroup"
             />
             <FormInput 
               label="Дата рождения:"
+              :value="nextStudentData.dateOfBirth"
+              placeholder="01.01.2000"
+              @input="onInput($event, 'dateOfBirth', 'text')"
               container-class="step1-form__birthday"
             />
             <FormInput 
               label="Группа здоровья:"
               view-type="select"
               :options="$options.medGroupsOptions"
+              :value="nextStudentData.healthGroup"
+              @input="onInput($event, 'healthGroup', 'select')"
               placeholder="Группа здоровья"
               container-class="step1-form__medGroup"
             />
@@ -54,21 +66,118 @@
               label="Факультет:"
               view-type="select"
               :options="$options.facultyOptions"
+              :value="nextStudentData.faculty"
+              @input="onInput($event, 'faculty', 'select')"
               placeholder="Факультет"
               container-class="step1-form__faculty"
             />
           </div>
           <div 
-            class="add-student-form__step2 step2-form"
+            class="add-student-form__step2 add-student-form__step-form step2-form"
             v-else-if="currentStep === 2"
           >
-            
+            <FormInput 
+              label="Рост (см):"
+              container-class="step2-form__height"
+              :value="nextStudentData.height"
+              placeholder="0"
+              @input="onInput($event, 'height', 'text')"
+            />
+            <FormInput 
+              label="Вес (кг):"
+              container-class="step2-form__weight"
+              :value="nextStudentData.weight"
+              placeholder="0"
+              @input="onInput($event, 'weight', 'text')"
+            />
+            <FormInput 
+              label="ЧСС:"
+              container-class="step2-form__heart-rate"
+              :value="nextStudentData.heartRate"
+              placeholder="0"
+              @input="onInput($event, 'heartRate', 'text')"
+            />
+            <FormDoubleTextInput 
+              label="Давление:"
+              container-class="step2-form__blood-pressure"
+              :value1="nextStudentData.bloodPressure.max"
+              @input1="onInput($event, 'bloodPressure.max', 'text')"
+              placeholder1="0"
+              :value2="nextStudentData.bloodPressure.min"
+              @input2="onInput($event, 'bloodPressure.min', 'text')"
+              placeholder2="0"
+            />
+            <FormDoubleTextInput 
+              label="Динамометр пр/лв:"
+              container-class="step2-form__dynamometer"
+              :value1="nextStudentData.dynamometer.right"
+              @input1="onInput($event, 'dynamometer.right', 'text')"
+              placeholder1="0"
+              :value2="nextStudentData.dynamometer.left"
+              @input2="onInput($event, 'dynamometer.left', 'text')"
+              placeholder2="0"
+            />
+          </div>
+          <div 
+            class="add-student-form__step3 add-student-form__step-form step3-form"
+            v-else-if="currentStep === 3"
+          >
+            <FormInput 
+              label="Приседания:"
+              container-class="step3-form__squats"
+              :value="nextStudentData.squats"
+              placeholder="0"
+              @input="onInput($event, 'squats', 'text')"
+            />
+            <FormInput 
+              label="Бег(с):"
+              container-class="step3-form__running"
+              :value="nextStudentData.running"
+              placeholder="0"
+              @input="onInput($event, 'running', 'text')"
+            />
+            <FormInput 
+              label="Лодочка:"
+              container-class="step3-form__boat"
+              :value="nextStudentData.boat"
+              placeholder="0"
+              @input="onInput($event, 'boat', 'text')"
+            />
+            <FormInput 
+              label="Отжимания:"
+              container-class="step3-form__push-ups"
+              :value="nextStudentData.pushUps"
+              placeholder="0"
+              @input="onInput($event, 'pushUps', 'text')"
+            />
+            <FormInput 
+              label="Подтягивания:"
+              container-class="step3-form__pull-ups"
+              :value="nextStudentData.pullUps"
+              placeholder="0"
+              @input="onInput($event, 'pullUps', 'text')"
+            />
           </div>
         </div>
         <div class="add-student-form__footer">
-          <FormButton>
+          <FormButton 
+            v-if="currentStep > 1 && currentStep <= 3"
+            container-class="add-student-form__action-button"
+            @click="prevButtonClick"
+          >
             <template>
+              Назад
+            </template>
+          </FormButton>
+          <FormButton
+            container-class="add-student-form__action-button"
+            @click="nextButtonClick"
+          >
+            <template v-if="currentStep < stepsCount">
               Далее
+            </template>
+            <template v-else="currentStep === stepsCount">
+              Добавить
             </template>
           </FormButton>
         </div>
@@ -82,6 +191,7 @@ import Modal from "./Modal.vue";
 import FormButton from "./FormButton.vue";
 import FormInput from "./inputs/FormInput.vue";
 import { courses, medGroups, studentsGroups, faculty } from "../constants/selects-options/selects-options";
+import FormDoubleTextInput from "./inputs/FormDoubleTextInput.vue";
 
 
 export default {
@@ -94,8 +204,9 @@ export default {
   components: {
     Modal,
     FormButton,
-    FormInput
-  },
+    FormInput,
+    FormDoubleTextInput
+},
 
   props: {
     isShowModal: {
@@ -107,13 +218,78 @@ export default {
   data() {
     return { 
       currentStep: 1,
-      stepsCount: 3
+      stepsCount: 3,
+      nextStudentData: {
+        fullname: "",
+        faculty: null,  // селект
+        group: null, // селект
+        course: null,  // селект
+        healthGroup: null, // селект 
+        dateOfBirth: "",
+        height: "",
+        weight: "",
+        heartRate: "",
+        bloodPressure: {
+          max: "",
+          min: "",
+        },
+        dynamometer: {
+          right: "",
+          left: "",
+        },
+        running: "",
+        throwing: "",
+        boat: "",
+        squats: "",
+        pullUps: "",
+        pushUps: "",
+      }
     };
   },
 
   methods: {
+    
     closeModal() {
       this.$emit("close")
+    },
+
+    prevButtonClick() {
+      this.currentStep -= 1
+    },
+
+    nextButtonClick() {
+      if (this.currentStep < this.stepsCount) {
+        this.currentStep += 1
+      }
+    },
+
+    /**
+     * 
+     * @param {object | string} nextValue 
+     * @param {string} fieldKey 
+     * @param {'text' | 'select'} inputType  
+     */
+    onInput(nextValue, fieldKey, inputType) {
+      /* console.log("event: ", event)
+      console.log("fieldKey: ", fieldKey)
+      console.log("inputType: ", inputType) */
+      /* if (inputType === 'text') {
+        this.nextStudentData[fieldKey] = nextValue
+      } */
+      if (fieldKey.includes('.')) {
+        const fieldKeys = fieldKey.split('.')
+        let targetObject = this.nextStudentData
+        //получаем максимально глубоко вложенный объект, чтобы  его полю присвоить значение
+        for (let i = 0; i < fieldKeys.length - 1; i++) {
+          targetObject = targetObject[fieldKeys[i]]
+        }
+        targetObject[fieldKeys[fieldKeys.length - 1]] = nextValue
+        console.log("this.nextStudentData: ", this.nextStudentData)
+      }
+      else {
+        this.nextStudentData[fieldKey] = nextValue
+      }
+      //console.log("student data after update: ", this.nextStudentData)
     }
   }
 };
@@ -126,7 +302,7 @@ export default {
     background-color: #2A2E96;
     padding: 50px 80px;
     min-width: 900px;
-    width: 65%;
+    width: 900px;
     height: 750px;
     border-radius: 50px;
 
@@ -134,6 +310,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-bottom: 50px;
     }
 
     &__title {
@@ -147,8 +324,14 @@ export default {
       flex: 1;
     }
 
-    &__step1 {
-        
+    &__action-button {
+      &:first-child {
+        margin-right: 24px;
+      }
+    }
+
+    &__step-form {
+      width: 100%;
     }
 
     &__close-button {
@@ -188,6 +371,70 @@ export default {
     &__faculty {
       grid-area: faculty;
     }
-
   }
+
+  .step2-form {
+    display: grid;
+    grid-template-areas: 
+      "height weight ."
+      "heart-rate blood-pressure dynamometer";
+
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+
+    &__height {
+      grid-area: height;
+    }
+
+    &__weight {
+      grid-area: weight;
+    }
+
+    &__heart-rate {
+      grid-area: heart-rate;
+    }
+    
+    &__blood-pressure {
+      grid-area: blood-pressure;
+    }
+
+    &__dynamometer {
+      grid-area: dynamometer;
+    }
+  }
+
+  .step3-form {
+    display: grid;
+    grid-template-areas: 
+      "squats running ."
+      "boat push-ups pull-ups";
+
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 24px;
+    grid-row-gap: 24px;
+
+    &__squats {
+      grid-area: squats;
+    }
+
+    &__running {
+      grid-area: running;
+    }
+
+    &__boat {
+      grid-area: boat;
+    }
+
+    &__push-ups {
+      grid-area: push-ups;
+    }
+
+    &__pull-ups {
+      grid-area: pull-ups;
+    }
+  }
+
 </style>

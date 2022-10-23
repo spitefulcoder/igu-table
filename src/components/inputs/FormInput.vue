@@ -7,8 +7,15 @@
             v-if="viewType === 'select'" 
             :options="options"
             :placeholder="placeholder"
+            :value="value"
+            @input="onInput($event)"
         />
-        <FormTextInput v-else/>
+        <FormTextInput 
+            v-else
+            :value="value"
+            :placeholder="placeholder"
+            @input="onInput($event)"
+        />
     </label>
 </template>
 
@@ -34,6 +41,13 @@ export default {
         },
         containerClass: {
             type: String
+        },
+        value: [String, Object]
+    },
+
+    methods: {
+        onInput(event) {
+            this.$emit('input', event)
         }
     }
 };
