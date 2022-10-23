@@ -3,6 +3,8 @@
         class="form-select-input" 
         :options="options"
         :placeholder="placeholder" 
+        :value="value"
+        @input="onInput"
         label="name"
     />
 </template>
@@ -17,6 +19,15 @@ export default {
     },
     placeholder: {
         type: String
+    },
+    value: {
+        type: Object
+    }
+  },
+
+  methods: {
+    onInput(event) {
+        this.$emit('input', event)
     }
   }
 
@@ -50,6 +61,7 @@ export default {
 
     .vs__selected {
         color: #fff;
+        margin: 0;
     }
 
     .vs__search {
@@ -59,19 +71,22 @@ export default {
         line-height: 35px !important;
         margin: 0 !important;
         border: none !important;
+
+        &::placeholder {
+            color: #889BDF !important;
+        }
+    }
+
+    .vs__dropdown-menu {
+        background-color: #DFE6FF;
+        border-bottom-left-radius: 32px;
+        border-bottom-right-radius: 32px;
     }
 
     /* .vs__open-indicator {
         fill: #fff;
     } */
     
-    /* .vs__dropdown-menu {
-        background: red;
-        border: none;
-        color: #394066;
-        text-transform: lowercase;
-        font-variant: small-caps;
-    } */
   }
 
   

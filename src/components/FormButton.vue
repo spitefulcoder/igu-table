@@ -1,6 +1,6 @@
 <template>
     <button 
-        class="form-button"
+        :class="containerClass + ' form-button'"
         @click="onClick"
     >
         <slot></slot>
@@ -12,15 +12,18 @@
 export default {
     props: {
         isShowModal: {
-        type: Boolean,
-        default: false
+            type: Boolean,
+            default: false
         },
+        containerClass: {
+            type: String
+        }
     },
 
     data() {
         return {
-        currentStep: 1,
-        stepsCount: 3
+            currentStep: 1,
+            stepsCount: 3
         };
     },
 
