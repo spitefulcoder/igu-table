@@ -31,7 +31,6 @@
 </template>
 
 <script>
-// import BEditableTable from "bootstrap-vue-editable-table";
 import BEditableTable from "./EditableTable.vue";
 
 export default {
@@ -65,6 +64,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .editable-table {
+  //table-layout: fixed;
   width: 1140px;
 }
 
@@ -124,11 +124,14 @@ export default {
   border: none;
   outline: none;
   padding: 0;
+  line-height: unset !important;
+
   &::placeholder {
     background: transparent;
     border: none;
     outline: none;
   }
+
   &:focus {
     display: inline-block !important;
     background: transparent;
@@ -139,6 +142,7 @@ export default {
     box-shadow: none;
     padding: 0;
   }
+
 }
 ::v-deep .custom-select {
   background: red;
@@ -170,6 +174,58 @@ export default {
     -webkit-box-shadow: none;
     box-shadow: none;
   }
+}
+
+::v-deep .delete-col {
+  //width: 50px;
+}
+
+::v-deep .full-name-col {
+  //width: 340px;
+  /* width: 340px;
+  min-width: 340px;
+  max-width: 340px; */
+  //width: 25%;
+}
+
+::v-deep .date-of-birth-col {
+  //width: 190px;
+  /* width: 190px;
+  min-width: 190px;
+  max-width: 190px; */
+  //width: 20%;
+}
+
+::v-deep .course-col {
+  //width: 180px;
+  /* width: 200px;
+  min-width: 200px;
+  max-width: 200px; */
+  //width: 10%;
+}
+
+::v-deep .faculty-col {
+  //width: 180px;
+  /* width: 180px;
+  min-width: 180px;
+  max-width: 180px; */
+  //width: 10%;
+}
+
+::v-deep .group-col {
+  //width: 180px;
+  /* width: 180px;
+  min-width: 180px;
+  max-width: 180px; */
+  //width: 10%;
+}
+
+::v-deep .health-group-col {
+  //width: 180px;
+  /* width: 180px;
+  min-width: 180px;
+  max-width: 180px; */
+  //width: 15%;
 }
 .icon {
   align-self: center;
