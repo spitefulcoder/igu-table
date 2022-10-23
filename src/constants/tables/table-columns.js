@@ -16,16 +16,19 @@ export const tableColumns = {
     {
       key: "delete",
       label: "",
+      class: "delete-col"
     },
     {
       key: "fullname",
       label: "Фамилия Имя Отчество",
       editable: true,
+      class: "full-name-col"
     },
     {
       key: "dateOfBirth",
       label: "Дата рождения",
       editable: true,
+      class: "date-of-birth-col"
     },
     {
       key: "course",
@@ -33,6 +36,7 @@ export const tableColumns = {
       type: "select",
       options: courses,
       editable: true,
+      class: "course-col"
     },
     {
       key: "faculty",
@@ -40,6 +44,7 @@ export const tableColumns = {
       type: "select",
       options: faculty,
       editable: true,
+      class: "faculty-col"
     },
     {
       key: "group",
@@ -47,6 +52,7 @@ export const tableColumns = {
       type: "select",
       options: studentsGroups,
       editable: true,
+      class: "group-col"
     },
     {
       key: "healthGroup",
@@ -54,10 +60,16 @@ export const tableColumns = {
       type: "select",
       options: medGroups,
       editable: true,
+      class: "health-group-col"
     },
   ],
   // Физическое развитие
   physicalFields: [
+    {
+      key: "delete",
+      label: "",
+      class: "delete-col"
+    },
     {
       key: "fullname",
       label: "Фамилия Имя Отчество",
@@ -78,19 +90,44 @@ export const tableColumns = {
       label: "ЧСС в покое",
       editable: true,
     },
-    {
+    /* {
       key: "bloodPressure",
       label: "АД в покое",
       editable: true,
+    }, */
+    {
+      key: "bloodPressureMax",
+      label: "АД верхнее",
+      editable: true,
     },
     {
+      key: "bloodPressureMin",
+      label: "АД нижнее",
+      editable: true,
+    },
+    /* {
       key: "dynamometer",
       label: "ДИНАМОМ правая/левая",
+      editable: true,
+    }, */
+    {
+      key: "dynamometerRight",
+      label: "Динамометр правая",
+      editable: true,
+    },
+    {
+      key: "dynamometerLeft",
+      label: "Динамометр левая",
       editable: true,
     },
   ],
   // Физ. подготовка (нормативы)
   standardsFields: [
+    {
+      key: "delete",
+      label: "",
+      class: "delete-col"
+    },
     {
       key: "fullname",
       label: "Фамилия Имя Отчество",

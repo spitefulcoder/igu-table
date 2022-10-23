@@ -8,14 +8,18 @@ export const EMPTY_STUDENT_DATA = {
     height: "",
     weight: "",
     heartRate: "",
-    bloodPressure: {
+    /* bloodPressure: {
       max: "",
       min: "",
-    },
-    dynamometer: {
+    }, */
+    bloodPressureMax: "",
+    bloodPressureMin: "",
+    /* dynamometer: {
       right: "",
       left: "",
-    },
+    }, */
+    dynamometerRight: "",
+    dynamometerLeft: "",
     running: "",
     throwing: "",
     boat: "",

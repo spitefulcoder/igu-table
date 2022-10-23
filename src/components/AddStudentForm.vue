@@ -105,21 +105,21 @@
             <FormDoubleTextInput 
               label="Давление:"
               container-class="step2-form__blood-pressure"
-              :value1="nextStudentData.bloodPressure.max"
-              @input1="onInput($event, 'bloodPressure.max', 'text')"
+              :value1="nextStudentData.bloodPressureMax"
+              @input1="onInput($event, 'bloodPressureMax', 'text')"
               placeholder1="0"
-              :value2="nextStudentData.bloodPressure.min"
-              @input2="onInput($event, 'bloodPressure.min', 'text')"
+              :value2="nextStudentData.bloodPressureMin"
+              @input2="onInput($event, 'bloodPressureMin', 'text')"
               placeholder2="0"
             />
             <FormDoubleTextInput 
               label="Динамометр пр/лв:"
               container-class="step2-form__dynamometer"
-              :value1="nextStudentData.dynamometer.right"
-              @input1="onInput($event, 'dynamometer.right', 'text')"
+              :value1="nextStudentData.dynamometerRight"
+              @input1="onInput($event, 'dynamometerRight', 'text')"
               placeholder1="0"
-              :value2="nextStudentData.dynamometer.left"
-              @input2="onInput($event, 'dynamometer.left', 'text')"
+              :value2="nextStudentData.dynamometerLeft"
+              @input2="onInput($event, 'dynamometerLeft', 'text')"
               placeholder2="0"
             />
           </div>
@@ -142,7 +142,7 @@
               @input="onInput($event, 'running', 'text')"
             />
             <FormInput 
-              label="Лодочка:"
+              label="Лодочка(с):"
               container-class="step3-form__boat"
               :value="nextStudentData.boat"
               placeholder="0"
@@ -262,14 +262,18 @@ export default {
         height: "",
         weight: "",
         heartRate: "",
-        bloodPressure: {
+        /* bloodPressure: {
           max: "",
           min: "",
         },
         dynamometer: {
           right: "",
           left: "",
-        },
+        }, */
+        bloodPressureMax: "",
+        bloodPressureMin: "",
+        dynamometerRight: "",
+        dynamometerLeft: "",
         running: "",
         throwing: "",
         boat: "",

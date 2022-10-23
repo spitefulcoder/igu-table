@@ -71,6 +71,7 @@
       <div
         :key="index + index + index + index + index"
         v-else-if="showField(field, data, field.type)"
+        class="editable-table-input-container"
       >
         <b-form-input
           :id="`${field.key}-${data.item.id}`"
