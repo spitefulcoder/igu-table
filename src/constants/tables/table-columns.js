@@ -66,6 +66,11 @@ export const tableColumns = {
   // Физическое развитие
   physicalFields: [
     {
+      key: "delete",
+      label: "",
+      class: "delete-col"
+    },
+    {
       key: "fullname",
       label: "Фамилия Имя Отчество",
       editable: true,
@@ -85,19 +90,44 @@ export const tableColumns = {
       label: "ЧСС в покое",
       editable: true,
     },
-    {
+    /* {
       key: "bloodPressure",
       label: "АД в покое",
       editable: true,
+    }, */
+    {
+      key: "bloodPressureMax",
+      label: "АД верхнее",
+      editable: true,
     },
     {
+      key: "bloodPressureMin",
+      label: "АД нижнее",
+      editable: true,
+    },
+    /* {
       key: "dynamometer",
       label: "ДИНАМОМ правая/левая",
+      editable: true,
+    }, */
+    {
+      key: "dynamometerRight",
+      label: "Динамометр правая",
+      editable: true,
+    },
+    {
+      key: "dynamometerLeft",
+      label: "Динамометр левая",
       editable: true,
     },
   ],
   // Физ. подготовка (нормативы)
   standardsFields: [
+    {
+      key: "delete",
+      label: "",
+      class: "delete-col"
+    },
     {
       key: "fullname",
       label: "Фамилия Имя Отчество",
