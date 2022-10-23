@@ -19,24 +19,30 @@
       <v-select
         class="form-selector form-selector__faculty"
         :options="options.faculty"
+        :value="filters.faculty"
+        @input="onFilterSelectInput($event, 'faculty')"
         placeholder="Факультет"
         label="name"
       />
       <v-select
         class="form-selector form-selector__course"
         :options="options.course"
+        :value="filters.course"
+        @input="onFilterSelectInput($event, 'course')"
         placeholder="Курс"
         label="name"
       />
       <v-select
         class="form-selector form-selector__group"
         :options="options.group"
+        :value="filters.group"
+        @input="onFilterSelectInput($event, 'group')"
         placeholder="Группа"
         label="name"
       />
     </div>
     <TheTable
-      :items="students"
+      :items="filteredStudents"
       :fields="tableColumns[tableName]"
       @update="updateStudent"
       @delete="deleteStudent"
@@ -83,7 +89,13 @@ export default {
         group: studentsGroups,
       },
       isAddStudentModalOpen: false,
+      filters: {
+        faculty: null,
+        group: null,
+        course: null
+      },
       students: [],
+      filteredStudents: [],
       database: null,
       tableColumns: tableColumns,
       tableName: "generalFields",
@@ -103,16 +115,25 @@ export default {
         const sortedStudentsArray = Object.values(studentsDataObj).sort(
           (a, b) => (a.fullname < b.fullname ? -1 : 1)
         );
-        this.students = sortedStudentsArray;
+        this.students = sortedStudentsArray
+        this.filteredStudents = sortedStudentsArray
       } else {
         this.students = [];
       }
     });
   },
 
-  destroyed() {},
-
   methods: {
+
+    /**
+     * 
+     * @param {*} val 
+     * @param {'faculty' | 'group' | 'course'} filterKey 
+     */
+    onFilterSelectInput(val, filterKey) {
+      this.filters[filterKey] = val
+    },
+
     toggleStudentModal() {
       this.isAddStudentModalOpen = !this.isAddStudentModalOpen;
     },
@@ -137,6 +158,26 @@ export default {
       this.tableName = val;
     },
   },
+
+  watch: {
+    filters: {
+      handler(newValue, _) {
+        this.filteredStudents = this.students.filter(studentData => {
+          for (const [key, value] of Object.entries(this.filters)) {
+            if (!Boolean(value)) {
+              continue
+            }
+            // Сравниваются значения в "селектах"
+            if (!Boolean(studentData[key]) || studentData[key].id !== value.id) {
+              return false
+            }
+          }
+          return true
+        })
+      },
+      deep: true
+    }
+  }
 };
 </script>
 
