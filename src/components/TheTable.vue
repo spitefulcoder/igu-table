@@ -8,10 +8,8 @@
       :fields="fields"
       @input-change="handleInput"
     >
-      <template #cell(delete)>
-        <BIconTrash
-          class="remove-icon"
-        ></BIconTrash>
+      <template #cell(delete)="data">
+        <BIconTrash @click="log(data)" class="remove-icon"></BIconTrash>
       </template>
 
       <template #head(fullname)>
@@ -57,6 +55,9 @@ export default {
   methods: {
     handleInput(data) {
       this.$emit("update", data);
+    },
+    log(data) {
+      console.log(data);
     },
   },
 };
