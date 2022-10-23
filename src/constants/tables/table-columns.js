@@ -16,16 +16,19 @@ export const tableColumns = {
     {
       key: "delete",
       label: "",
+      class: "delete-col"
     },
     {
       key: "fullname",
       label: "Фамилия Имя Отчество",
       editable: true,
+      class: "full-name-col"
     },
     {
       key: "dateOfBirth",
       label: "Дата рождения",
       editable: true,
+      class: "date-of-birth-col"
     },
     {
       key: "course",
@@ -33,6 +36,7 @@ export const tableColumns = {
       type: "select",
       options: courses,
       editable: true,
+      class: "course-col"
     },
     {
       key: "faculty",
@@ -40,6 +44,7 @@ export const tableColumns = {
       type: "select",
       options: faculty,
       editable: true,
+      class: "faculty-col"
     },
     {
       key: "group",
@@ -47,6 +52,7 @@ export const tableColumns = {
       type: "select",
       options: studentsGroups,
       editable: true,
+      class: "group-col"
     },
     {
       key: "healthGroup",
@@ -54,6 +60,7 @@ export const tableColumns = {
       type: "select",
       options: medGroups,
       editable: true,
+      class: "health-group-col"
     },
   ],
   // Физическое развитие
