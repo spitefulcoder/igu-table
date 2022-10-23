@@ -69,6 +69,10 @@ export default {
   align-items: center;
   justify-content: center;
 }
+::v-deep tbody > tr > td {
+  text-align-last: center;
+  vertical-align: middle;
+}
 
 ::v-deep .table-striped > tbody > tr:nth-child(odd) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
@@ -107,12 +111,26 @@ export default {
 }
 
 ::v-deep .form-control {
-  background: red;
+  display: inline-block !important;
+  background: transparent;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  padding: 0;
   &::placeholder {
-    background: red;
+    background: transparent;
+    border: none;
+    outline: none;
   }
   &:focus {
-    background: red;
+    display: inline-block !important;
+    background: transparent;
+    border: none;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding: 0;
   }
 }
 ::v-deep .custom-select {
