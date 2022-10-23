@@ -6,8 +6,13 @@
     <template v-slot:content>
       <div class="add-student-form">
         <div class="add-student-form__head">
-          <div class="add-student-form__title">
-            Добавить студента  {{currentStep}}/{{stepsCount}}
+          <div class="add-student-form__head-left">
+            <div 
+              class="add-student-form__title"
+              v-if="currentStep <= lastFormStep"
+            >
+              Добавить студента  {{currentStep}}/{{lastFormStep}}
+            </div>
           </div>
           <img 
             src="../assets/cross-icon.svg" 
@@ -158,6 +163,16 @@
               @input="onInput($event, 'pullUps', 'text')"
             />
           </div>
+          <div
+            class="add-student-form__added-successfully"
+            v-else-if="currentStep === 4"
+          >
+            <div
+              class="add-student-form__added-successfully-text"
+            >
+              Студент добавлен в базу!
+            </div>
+          </div>
         </div>
         <div class="add-student-form__footer">
           <FormButton 
@@ -172,12 +187,26 @@
           <FormButton
             container-class="add-student-form__action-button"
             @click="nextButtonClick"
+            v-if="currentStep < lastFormStep"
           >
-            <template v-if="currentStep < stepsCount">
+            <template>
               Далее
             </template>
-            <template v-else="currentStep === stepsCount">
+          </FormButton>
+          <FormButton
+            @click="addStudentToDB"
+            v-else-if="currentStep === lastFormStep"
+          >
+            <template>
               Добавить
+            </template>
+          </FormButton>
+          <FormButton
+            @click="closeModal"
+            v-else-if="currentStep === 4"
+          >
+            <template>
+              ОК
             </template>
           </FormButton>
         </div>
@@ -192,7 +221,10 @@ import FormButton from "./FormButton.vue";
 import FormInput from "./inputs/FormInput.vue";
 import { courses, medGroups, studentsGroups, faculty } from "../constants/selects-options/selects-options";
 import FormDoubleTextInput from "./inputs/FormDoubleTextInput.vue";
-
+import { nanoid } from "nanoid";
+import { getDatabase, ref, set } from "@firebase/database";
+import { EMPTY_STUDENT_DATA } from '../constants/students/empty-student'
+import { STUDENTS_FB_PATH } from "../constants/firebase/data-paths";
 
 export default {
   
@@ -217,8 +249,9 @@ export default {
 
   data() {
     return { 
-      currentStep: 1,
-      stepsCount: 3,
+      currentStep: 1, // первые шаги - форма, далее экран "Успешно добавлен"
+      lastFormStep: 3,
+      emptyStudent: EMPTY_STUDENT_DATA,
       nextStudentData: {
         fullname: "",
         faculty: null,  // селект
@@ -250,6 +283,8 @@ export default {
   methods: {
     
     closeModal() {
+      this.nextStudentData = this.emptyStudent
+      this.currentStep = 1
       this.$emit("close")
     },
 
@@ -258,7 +293,7 @@ export default {
     },
 
     nextButtonClick() {
-      if (this.currentStep < this.stepsCount) {
+      if (this.currentStep < this.lastFormStep) {
         this.currentStep += 1
       }
     },
@@ -270,12 +305,6 @@ export default {
      * @param {'text' | 'select'} inputType  
      */
     onInput(nextValue, fieldKey, inputType) {
-      /* console.log("event: ", event)
-      console.log("fieldKey: ", fieldKey)
-      console.log("inputType: ", inputType) */
-      /* if (inputType === 'text') {
-        this.nextStudentData[fieldKey] = nextValue
-      } */
       if (fieldKey.includes('.')) {
         const fieldKeys = fieldKey.split('.')
         let targetObject = this.nextStudentData
@@ -284,12 +313,22 @@ export default {
           targetObject = targetObject[fieldKeys[i]]
         }
         targetObject[fieldKeys[fieldKeys.length - 1]] = nextValue
-        console.log("this.nextStudentData: ", this.nextStudentData)
       }
       else {
         this.nextStudentData[fieldKey] = nextValue
       }
-      //console.log("student data after update: ", this.nextStudentData)
+    },
+
+    addStudentToDB() {
+      const database = getDatabase()
+      const nextStudentId = nanoid();
+      set(ref(database, `${STUDENTS_FB_PATH}/${nextStudentId}`), 
+        {
+          ...this.nextStudentData,
+          id: nextStudentId,
+        }
+      );
+      this.currentStep = 4
     }
   }
 };
@@ -332,6 +371,18 @@ export default {
 
     &__step-form {
       width: 100%;
+    }
+
+    &__added-successfully {
+      height: 100%;
+    }
+
+    &__added-successfully-text {
+      margin-top: 160px;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 48px;
+      line-height: 59px;
     }
 
     &__close-button {
