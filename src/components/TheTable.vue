@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import BEditableTable from "bootstrap-vue-editable-table";
+// import BEditableTable from "bootstrap-vue-editable-table";
+import BEditableTable from "./EditableTable.vue";
 
 export default {
   components: {
@@ -103,6 +104,25 @@ export default {
 
 ::v-deep .search-input {
   width: 100px;
+}
+
+::v-deep .form-control {
+  background: red;
+  &::placeholder {
+    background: red;
+  }
+  &:focus {
+    background: red;
+  }
+}
+::v-deep .custom-select {
+  background: red;
+  &::placeholder {
+    background: red;
+  }
+  &:focus {
+    background: red;
+  }
 }
 
 .search-input {

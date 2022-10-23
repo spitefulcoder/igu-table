@@ -17,9 +17,17 @@ export default {
 
   data: () => ({
     items: [
-      { label: "Общая информация", isActive: true, value: "general" },
-      { label: "Физическое развитие", isActive: false, value: "physical" },
-      { label: "Физическая подготовка", isActive: false, value: "standards" },
+      { label: "Общая информация", isActive: true, fields: "generalFields" },
+      {
+        label: "Физическое развитие",
+        isActive: false,
+        fields: "physicalFields",
+      },
+      {
+        label: "Физическая подготовка",
+        isActive: false,
+        fields: "standardsFields",
+      },
     ],
   }),
   methods: {
@@ -28,7 +36,7 @@ export default {
         element.isActive = false;
       });
       item.isActive = true;
-      this.$emit("change-tab", item.value);
+      this.$emit("change-tab", item.fields);
     },
   },
 };
@@ -49,6 +57,8 @@ export default {
   }
 }
 .navs > div {
+  cursor: pointer;
+  user-select: none;
   padding: 8px 17px;
   margin-right: 66px;
   font-style: normal;
