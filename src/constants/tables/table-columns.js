@@ -14,6 +14,10 @@ export const tableColumns = {
   // Вкладка общая информация
   generalFields: [
     {
+      key: "delete",
+      label: "",
+    },
+    {
       key: "fullname",
       label: "Фамилия Имя Отчество",
       editable: true,

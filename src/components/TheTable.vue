@@ -8,6 +8,10 @@
       :fields="fields"
       @input-change="handleInput"
     >
+      <template #cell(delete)>
+        <BIconTrash class="remove-icon"></BIconTrash>
+      </template>
+
       <template #head(fullname)>
         <b-input-group>
           <b-form-input
