@@ -37,6 +37,8 @@ export default {
 <style lang="scss">
   .form-select-input {
     width: 100%;
+    max-width: 100%;
+    min-width: 100%;
 
     .vs__dropdown-toggle {
         padding: 14px 22px;
@@ -62,6 +64,8 @@ export default {
     .vs__selected {
         color: #fff;
         margin: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .vs__search {

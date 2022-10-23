@@ -26,6 +26,13 @@
           </b-input-group-append>
         </b-input-group>
       </template>
+      <!-- <template #thead-top="data">
+        <b-tr>
+          <b-th colspan="5"></b-th>
+          <b-th colspan="2">АД</b-th>
+          <b-th></b-th>
+        </b-tr>
+      </template> -->
     </b-editable-table>
   </div>
 </template>
