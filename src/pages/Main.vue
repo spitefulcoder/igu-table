@@ -15,6 +15,9 @@
       :is-show-modal="isAddStudentModalOpen"
       @close="toggleStudentModal"
     />
+    <div class="filters-head">
+      Фильтры
+    </div>
     <div class="filters">
       <v-select
         class="form-selector form-selector__faculty"
@@ -202,6 +205,13 @@ header {
   display: flex;
   margin-bottom: 56px;
   height: 64px;
+}
+
+.filters-head {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 44px;
+  margin-bottom: 28px;
 }
 
 .add-button {
