@@ -44,9 +44,9 @@ export default {
       get(child(this.db, `token/`))
         .then((snapshot) => {
           if (snapshot.exists()) {
-            console.log(snapshot.val() === this.code);
             if (snapshot.val() === this.code) {
-              this.$root.isAuth = true;
+              console.log(this.auth);
+              localStorage.setItem("userKey", this.code);
               signInAnonymously(this.auth)
                 .then(() => {
                   // Signed in..
@@ -57,6 +57,8 @@ export default {
                   const errorMessage = error.message;
                   // ...
                 });
+            } else {
+              localStorage.removeItem("userKey");
             }
           } else {
             console.log("No data available");

@@ -18,7 +18,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== "Login" && !isAuth) next({ name: "Login" });
+  if (to.name !== "Login" && !localStorage.getItem("userKey"))
+    next({ name: "Login" });
   else next();
 });
 
